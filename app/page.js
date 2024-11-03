@@ -6,49 +6,48 @@ import Projects from "./components/projects";
 import Rank from "./components/rank";
 import GitStats from "./components/stats";
 
-async function getGitProfile() {
-  const res = await fetch(`https://api.github.com/users/${userData.githubUser}`)
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
-
-  return await res.json();
+const profile = {
+  name: "Eshini Nethmini",
+  bio: "Passionate IT undergraduate at the University of Sri Jayawardenepura.Professional & Ambitious. I love creating websites and developing engaging front-end experiences",
+  avatar_url: "https://avatars.githubusercontent.com/u/161203306?v=4", 
+  location: "Homagama, Sri Lanka",
+  email: "eshini.nethmini@gmail.com",
+  public_repos: 4,
 };
 
-async function getGitProjects() {
-  const res = await fetch(`https://api.github.com/search/repositories?q=user:${userData.githubUser}+fork:false&sort=stars&per_page=10&type=Repositories`)
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
-
-  return await res.json();
+const projects = {
+  items: [
+    {
+      name: "Personal Portfolio",
+      description: "A personal portfolio showcasing my skills, projects, and journey as a software developer.",
+      html_url: "https://github.com/FHSS-USJ/assignment-01-EshiniN1003.git",
+    },
+    {
+      name: "Movie Web",
+      description: "A web application that allows users to explore movie information, reviews, and ratings.",
+      html_url: "https://github.com/FHSS-USJ/assignment-02-EshiniN1003.git",
+    },
+  ],
 };
 
-export default async function Home() {
-  const profile = await getGitProfile();
-  const projects = await getGitProjects();
-
+export default function Home() {
   return (
     <>
       <HeroSection profile={profile} />
-      <GitStats />
-      <Projects
-        projects={projects.items}
-        profile={profile}
-      />
+      <GitStats profile={profile} />
+      <Projects projects={projects.items} profile={profile} />
       <GitLanguage />
       <Rank />
       <Contributions />
     </>
-  )
-};
+  );
+}
 
-export async function generateMetadata({ params, searchParams }, parent) {
-  const profile = await getGitProfile();
 
+export function generateMetadata() {
   return {
     title: `GitHub Profile of ${profile.name}`,
-    description: profile.description,
+    description: profile.bio,
   };
-};
+}
